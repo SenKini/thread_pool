@@ -37,15 +37,12 @@ void ThreadPool::worker() {
 			_idleThreadNum--;
 
 			if (_tasks.empty()) {
-				if (_isQuit) {	// 如果已经要退出了，但是任务队列中仍有未完成的任务，则执行完后再退出
-					_curThreadNum--;
-					return;
-				}
-				if (isTimeout) {
-					_curThreadNum--;
+				_curThreadNum--;
+
+				if (isTimeout)	// 超时说明线程过多，减少线程
 					joinFinishedThread(std::this_thread::get_id());
-					return;
-				}
+
+				return;
 			}
 			else {
 				task = _tasks.front();
