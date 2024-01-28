@@ -1,11 +1,7 @@
 #include "thread_pool.hpp"
 
 ThreadPool::ThreadPool(int mtn)
-	: _maxThreadNum(mtn) {
-	_curThreadNum = 0;
-	_idleThreadNum = 0;
-	_isQuit = false;
-}
+	: _maxThreadNum(mtn), _curThreadNum(0), _idleThreadNum(0), _isQuit(false) {}
 
 ThreadPool::~ThreadPool() {
 	_isQuit = true;

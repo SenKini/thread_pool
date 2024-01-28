@@ -34,8 +34,9 @@ public:
 
 	template <typename Func, typename... Arg>
 	auto addTask(Func &&func, Arg &&...args) {	// 添加任务
+		using ReturnType = decltype(func(args...));
+
 		auto taskFunc = std::bind(std::forward<Func>(func), std::forward<Arg>(args)...);
-		using ReturnType = decltype(func());
 		auto taskPackge = new std::packaged_task<ReturnType()>(taskFunc);
 		auto res = taskPackge->get_future();
 
@@ -49,7 +50,7 @@ public:
 			if (_idleThreadNum > 0)	 // 如果有空闲线程则不必新建线程
 				_cv.notify_one();
 			else if (_curThreadNum < _maxThreadNum) {  // 保证线程数不会超过最大值
-				std::thread t(ThreadPool::worker, this);
+				std::thread t(&ThreadPool::worker, this);
 
 				_threads[t.get_id()] = std::move(t);
 				_curThreadNum++;
