@@ -1,33 +1,18 @@
-#include "thread_pool.hpp"
+#include "thread_pool.h"
 #include <iostream>
-#include <future>
-
-void task1() {
-	std::cout << "hello" << std::endl;
-}
-
-void task2() {
-	std::cout << "h" << std::endl;
-}
-
-void task3() {
-	std::cout << "world" << std::endl;
-}
-
-void task4() {
-	std::cout << "w" << std::endl;
-}
+#include <chrono>
 
 int main() {
-	ThreadPool t(5);
+    ThreadPool *tp = ThreadPool::getInstance(5);
 
-	t.addTask(task1);
-	t.addTask(task2);
-	t.addTask(task3);
-	t.addTask(task4);
+    tp->addTask([] { std::cout << "hello1" << std::endl; });
+    tp->addTask([] { std::cout << "hello2" << std::endl; });
+    tp->start();
+    tp->addTask([] { std::cout << "hello3" << std::endl; });
+    tp->addTask([] { std::cout << "hello4" << std::endl; });
 
-	// std::packaged_task<decltype(task)> pt(task);
-	// pt();
+    std::this_thread::sleep_for(std::chrono::seconds(5));
+    tp->stop();
 
-	return 0;
+    return 0;
 }
