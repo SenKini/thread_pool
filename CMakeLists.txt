@@ -4,5 +4,6 @@ project(thread_pool)
 set(CMAKE_CXX_STANDARD 20)
 
 file(GLOB SRC ${CMAKE_CURRENT_SOURCE_DIR}/*.cpp)
+file(GLOB HEAD ${CMAKE_CURRENT_SOURCE_DIR}/*.h)
 
-add_executable(tpool ${SRC})
+add_executable(tpool ${SRC} ${HEAD})
